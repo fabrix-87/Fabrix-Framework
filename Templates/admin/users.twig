@@ -1,0 +1,167 @@
+{% extends "layouts/admin.twig" %}
+
+{% set site_title = 'Gestione utenti' %}
+
+{% block customs_css %}
+<link rel="stylesheet" type="text/css" href="{{ css('DataTables/datatables.min.css') }}"/>
+{% endblock %}
+
+{% block customs_js %}
+<script type="text/javascript" src="{{ assets('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ assets('plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script type="text/javascript" src="{{ js('pages/users.js') }}"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ breadcrumb({'Gestione utenti' : url('admin.users@index')}) }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="alert alert-success collapse" id="alert-success">
+    <h4><i class="icon fa fa-check"></i> Avviso!</h4>
+    <span>Utente Eliminato.</span>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <h3><i class="fas fa-users"></i> Tabella utenti</h3>
+    </div>
+    <div class="card-body">
+        <table id="user_list" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Username</th>
+                    <th>Data Reg.</th>
+                    <th>eMail</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Username</th>
+                    <th>Data Reg.</th>
+                    <th>eMail</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#adduser">
+    Aggiungi Utente
+</button>
+
+
+
+<!-- userDetailsModal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dettagli utente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"><div class="te"></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" disabled>Modifica</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- deleteUserModal -->
+<div class="modal fade" id="deleteUser" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Elimina utente</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Se sicuro di voler eliminare quest'utente?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-danger" id="btn_confirm_delete_user">Elimina</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+
+<!-- addUserModal -->
+<div class="modal fade" tabindex="-1" id="adduser" role="dialog" aria-labelledby="adduserTitle">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adduserTitle">Aggiungi Utente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" data-toggle="validator" id="userForm">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input name="firstname" type="text" class="form-control" placeholder="Nome">
+                    </div>
+                    <div class="form-group">
+                        <label>Cognome</label>
+                        <input name="lastname" type="text" class="form-control" placeholder="Cognome">
+                    </div>
+                    <div class="form-group">
+                        <label>Username (minimo 5 caratteri)*</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input name="username" type="text" class="form-control" placeholder="Username" data-minlength="5" data-error="Username non valido o indisponibile"  required data-remote="ajax.php?route=users&action=checkUsername">
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Password (minimo 8 caratteri)*</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                            <input name="password" type="password" class="form-control" placeholder="Password" data-minlength="8" data-error="La password deve essere almeno di 8 caratteri"  required>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>E-Mail*</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                            <input name="email" type="email" class="form-control" placeholder="Email" data-remote="ajax.php?route=users&action=checkMail" data-error="Indirizzo e-mail non valido o gi&agrave; presente" required>
+                        </div>
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light pull-left" data-dismiss="modal">Chiudi</button>
+                <button type="button" class="btn btn-primary" id="btnFormSubmit">Aggiungi</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+<!-- /.modal -->
+{% endblock %}

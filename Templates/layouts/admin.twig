@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <base href="{{ base_path }}">
+
+    <title>{{ site_title }}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ assets('images/favicon.ico') }}">
+
+    <!-- Switchery css -->
+    <link href="{{ assets('plugins/switchery/switchery.min.css') }}" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ css('bootstrap.min.css') }}">
+
+    <!-- Font Awesome CSS -->
+    <link href="{{ css('fa/all.min.css') }}" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="{{ css('admin/style.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- BEGIN CSS for this page -->
+    {% block customs_css %}{% endblock %}
+
+    <!-- END CSS for this page -->
+
+</head>
+
+<body class="adminbody">
+
+    <div id="main">
+
+        <!-- top bar navigation -->
+        <div class="headerbar">
+
+            <!-- LOGO -->
+            <div class="headerbar-left">
+                <a href="{{ url('admin.home@index')}}" class="logo"><span>Admin</span></a>
+            </div>
+
+            <nav class="navbar-custom">
+
+                <ul class="list-inline float-right mb-0">
+                    <li class="list-inline-item dropdown notif">
+                        <a class="nav-link dropdown-toggle nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            Bentornato, {{ _user.firstname }} <img src="{{ images('avatars/admin.png') }}" alt="Profile image" class="avatar-rounded">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                            <!-- item-->
+                            <div class="dropdown-item noti-title">
+                                <h5 class="text-overflow"><small>Menu utente</small> </h5>
+                            </div>
+
+                            <!-- item-->
+                            <a href="pro-profile.html" class="dropdown-item notify-item">
+                                <i class="fa fa-user"></i> <span>Profile</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="{{ url('admin.auth@logout') }}" class="dropdown-item notify-item">
+                                <i class="fa fa-power-off"></i> <span>Esci</span>
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+
+                <ul class="list-inline menu-left mb-0">
+                    <li class="float-left">
+                        <button class="button-menu-mobile open-left">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+                    </li>
+                </ul>
+
+            </nav>
+
+        </div>
+        <!-- End Navigation -->
+
+
+        <!-- Left Sidebar -->
+        <div class="left main-sidebar">
+
+            <div class="sidebar-inner leftscroll">
+
+                <div id="sidebar-menu">
+
+                    <ul>
+
+                        <li class="submenu">
+                            <a href="{{ url('admin.home@index') }}"><i class="fas fa-tachometer-alt"></i><span> Dashboard </span> </a>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="{{ url('admin.users@index') }}"><i class="fas fa-users"></i> <span> Utenti </span></a>
+                        </li>
+
+
+
+                    </ul>
+
+                    <div class="clearfix"></div>
+
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+        <!-- End Sidebar -->
+
+
+        <div class="content-page">
+
+            <!-- Start content -->
+            <div class="content">
+
+                <div class="container-fluid">
+                    <div class="row">
+            				<div class="col-xl-12">
+            						<div class="breadcrumb-holder">
+            								<h1 class="main-title float-left">{{ site_title }}</h1>
+            								{% block breadcrumb %}{% endblock %}
+            								<div class="clearfix"></div>
+            						</div>
+            				</div>
+            		</div>
+            		<!-- end row -->
+
+
+            		<div class="row">
+            				<div class="col-xl-12">
+                                {% block content %}{% endblock %}
+                            </div>
+                    </div>
+                </div>
+                <!-- END container-fluid -->
+
+            </div>
+            <!-- END content -->
+
+        </div>
+        <!-- END content-page -->
+
+        <footer class="footer">
+            <span class="text-right">
+                Copyright <a target="_blank" href="#">Your Website</a>
+            </span>
+            <span class="float-right">
+                Powered by <a target="_blank" href="https://www.pikeadmin.com"><b>Pike Admin</b></a>
+            </span>
+        </footer>
+
+    </div>
+    <!-- END main -->
+
+    <script src="{{ js('modernizr.min.js') }}"></script>
+    <script src="{{ js('jquery.min.js') }}"></script>
+    <script src="{{ js('moment.min.js') }}"></script>
+
+    <script src="{{ js('popper.min.js') }}"></script>
+    <script src="{{ js('bootstrap.min.js') }}"></script>
+
+    <script src="{{ js('detect.js') }}"></script>
+    <script src="{{ js('fastclick.js') }}"></script>
+    <script src="{{ js('jquery.blockUI.js') }}"></script>
+    <script src="{{ js('jquery.nicescroll.js') }}"></script>
+    <script src="{{ js('jquery.scrollTo.min.js') }}"></script>
+    <script src="{{ assets('plugins/switchery/switchery.min.js') }}"></script>
+
+    <!-- App js -->
+    <script src="{{ js('pikeadmin.js') }}"></script>
+
+    <!-- BEGIN Java Script for this page -->
+    {% block customs_js %}{% endblock %}
+    <!-- END Java Script for this page -->
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "layouts/admin.twig" %}
+
+{% set site_title = 'Dashboard' %}
+
+{% block breadcrumb %}
+    {{ breadcrumb() }}
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="card mb-3">
+			<div class="card-header">
+                <h3><i class="fas fa-calendar-week" aria-hidden="true"></i> Aggiungi Evento</h3>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Inserisci un nuovo post per un evento.</p>
+                <a class="btn btn-primary" href="{{ url('admin.posts@create') }}">Inserisci</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
