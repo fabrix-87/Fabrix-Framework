@@ -2,9 +2,6 @@
 
 namespace System\Helpers;
 
-//use System\Core\Router;
-use System\Helpers\Session;
-
 /**
  * Request class
  * Gestisce tutte le richieste dal browser
@@ -22,6 +19,9 @@ class Request
     private $routePath;
     // Metodo Http
     private $httpMethod;
+
+    // check per presenza di dati POST
+    private $hasPost = false;
 
     // Metodo di output
     private $httpOutput = 'html';
@@ -42,6 +42,7 @@ class Request
 
         $this->parseUri();
         $this->parseGetData();
+        $this->parsePostData();
     }
 
                
@@ -76,22 +77,25 @@ class Request
     /**
      * Controlla e salva i dati passati via Post nella variabile statica $postParams
      */
-    public function parsePostData()
+    private function parsePostData()
     {
         // verifica la presenza del token per la protezione CSRF
         if (empty($_POST)){
             $this->postParams = [];
-        } elseif(isset($_POST['CSRF']) and Session::get('token')) {
-            if (hash_equals(Session::get('token'), $_POST['CSRF']))
-            {
-                $this->postParams = $this->sanitize_xss($_POST);
-            } else {
-                throw new \Exception("Token CSRF non valido", 1);
-            }
-        }else{
-            throw new \Exception("Token CSRF non trovato", 1);
+        } else {
+            $this->postParams = $this->sanitize_xss($_POST);
+            $this->isPost = true;
         }
-
+    }
+    
+    /**
+     * Controllo se sono presenti dati con metodo POST
+     *
+     * @return bool
+     */
+    public function hasPost(): bool
+    {
+        return $this->hasPost;
     }
 
     public function sanitize_xss($value) {

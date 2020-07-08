@@ -2,18 +2,14 @@
 
 namespace System\Routing;
 
-use System\Routing\Router;
-
 use \Exception;
 
 class Dispatcher {
-    protected $router = null;
     protected $defaultPath = 'home';
     protected $staticRoutes = [];
     protected $dynamicRoutes = [];
 
-    public function __construct(Router $router) {
-        $this->router = $router;
+    public function __construct() {
         list($this->staticRoutes, $this->dynamicRoutes) = Routes::getRoutes();
     }
 

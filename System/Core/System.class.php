@@ -28,69 +28,22 @@ class System{
         
 
         $registry = new Registry();
-        $requests = new Request();
-
-        $router = new Router($registry);
-      
-        // carico la definizione delle route
-        $router->initRoutes($requests->getRequestMode());
-
-        // Effettuo il dispatch della route
-        $dispatcher = new Dispatcher($router);
-        $dispatchedRoute = $dispatcher->dispatch($requests->getHttpMethod(), $requests->getPath());
-
-        $registry->set('requests', $requests);
+        $registry->set('requests', new Request());
         $registry->set('config', $config);
+
+        $router = new Router($registry);      
+        $router->initRouting();
+
         $registry->set('db', new DB($config->get('database')));        
-
-        // Avvio la sessione.
-        $sessionCfg = $config->get('session');
-        if($dispatchedRoute['prefix'] == BACKEND_PREFIX){
-            Session::start($sessionCfg, $sessionCfg['backend_name']);
-        }else{
-            Session::start($sessionCfg, $sessionCfg['frontend_name']);
-        }
-
-        // faccio il parsing delle richieste post dopo l'avvio della sessione
-        // per il controllo CSRF
-        $requests->parsePostData();
-
-        /* test modelli e datamapper */
-        /*
-        $user = new \App\User;
-        $uMap = new \App\Mapper\user_Mapper($registry->get('db'), $user);
-
-        $uMap->findById(1);
-
-        var_dump($user);
-
-        var_dump($user->getAll());
-
-        */
-        
-
-        //
-        // $uMap->findById(1,$user);
-        //
-        // var_dump($user);
-        // die();
 
         $registry->set('user', new SystemUser($registry));
 
         // Instrada la route
         try{
-            $response = $router->executeAction($dispatchedRoute['action'], $dispatchedRoute['prefix'], $dispatchedRoute['args']);
-            if($requests->getRequestMode() === 'api' and is_array($response)){
-                header('Content-Type: application/json');
-                echo json_encode($response);
-            }
+          $router->startRoute();  
         }catch(Exception $e){
             die($e->getMessage());
         }
-        
-
-        
-
     }
 
     /**
@@ -113,6 +66,7 @@ class System{
         define("PUBLIC_PATH", ROOT . "public" . DS);
         define("TEMPLATE_PATH", ROOT . "Templates" . DS);
         define("CONTROLLER_PATH", APP_PATH . "Controllers" . DS);
+        define("MIDDLEWARE_PATH", APP_PATH . "Middlewares" . DS);
 
         /** @var string Percorso fisico della cartella dei Model */
         define("MODEL_PATH", APP_PATH . "Models" . DS);
@@ -195,6 +149,9 @@ class System{
                     break;
                 case 'mappers':
                     $includePath = MAPPER_PATH . $className .".php";
+                    break;
+                case 'middlewares':
+                    $includePath = MIDDLEWARE_PATH . $className .".class.php";
                     break;
                 default:
                     $includePath = APP_PATH . ucfirst($className).".class.php";

@@ -18,8 +18,10 @@
  * '/user/{name:a}'
  */
 
-$route->group(['prefix' => BACKEND_PREFIX], function($route){
-    $route->resource('users');
+use System\Routing\Routes;
+
+Routes::group(['prefix' => BACKEND_PREFIX], function(){
+    Routes::resource('users');
 });
 
-$route->get('test','test@prova');
+Routes::get('test','test@prova');

@@ -4,6 +4,7 @@ namespace System\Routing;
 
 use Exception;
 use System\Core\Registry;
+use System\Helpers\Session;
 use System\Routing\Routes;
 
 /**
@@ -12,10 +13,56 @@ use System\Routing\Routes;
 class Router
 {    
     private Registry $registry;
+    private $mode = 'web';
+    private $dispatchedRoute;
+    private $config;
 
     public function __construct(Registry $registry)
     {
-        $this->registry = $registry;
+        $this->registry = $registry;        
+    }
+
+    public function initRouting()
+    {
+        $requests = $this->registry->get('requests');
+        $this->mode = $requests->getRequestMode();
+
+        // carico la definizione delle route
+        $this->loadRoutes($this->mode);
+
+        // Effettuo il dispatch della route
+        $dispatcher = new Dispatcher();
+        $this->dispatchedRoute = $dispatcher->dispatch($requests->getHttpMethod(), $requests->getPath());
+
+        // Avvio la sessione.
+        $this->config = $this->registry->get('config');
+        $sessionCfg = $this->config->get('session');
+
+        $sessionName = ($this->dispatchedRoute['prefix'] == BACKEND_PREFIX) ? $sessionCfg['backend_name'] : $sessionCfg['frontend_name'];        
+
+        Session::start($sessionCfg, $sessionName);
+    }
+
+    public function startRoute()
+    {
+        $appCfg = $this->config->get('app');
+        $middlewares = $appCfg['middlewares'];
+
+        foreach($middlewares as $key => $middleware)
+        {
+            new $middleware($this->registry);
+        }
+
+        $response = $this->executeAction(
+            $this->dispatchedRoute['action'], 
+            $this->dispatchedRoute['prefix'], 
+            $this->dispatchedRoute['args']
+        );
+        
+        if($this->mode === 'api' and is_array($response)){
+            header('Content-Type: application/json');
+            echo json_encode($response);
+        }
     }
 
     /**
@@ -24,16 +71,14 @@ class Router
      * @param  string $mode (web|api)
      * @return void
      */
-    public function initRoutes(string $mode)
+    private function loadRoutes(string $mode)
     {
-        Routes::getInstance();
-        
         $path = ROUTES_PATH.$mode.'.php';
         try{            
             if(!file_exists($path))
                 throw new Exception('Nessun file di dichiarazione delle rotte trovato per '.$mode);
             
-            //$route = Routes::getInstance();            
+            Routes::getInstance();            
             require_once($path);            
 
         }catch(Exception $e){
@@ -48,7 +93,7 @@ class Router
      * @param string $prefix
      * @param array $args
      */
-    public function executeAction(string $action, string $prefix = '', array $args = [])
+    private function executeAction(string $action, string $prefix = '', array $args = [])
     {
         if(stristr($action, '@') === FALSE) {
             return false;

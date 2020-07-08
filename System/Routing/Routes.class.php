@@ -19,6 +19,9 @@ class Routes
     // prefisso per le classi dei controller
     private static $prefix = '';
 
+    // lista delle middleware
+    private static $middleware = [];
+
     private static $staticRoutes = [];
     private static $dynamicRoutes = [];
 
@@ -187,6 +190,7 @@ class Routes
         self::$staticRoutes[$route][$httpMethod] = [
             'prefix' => self::$prefix,
             'action' => $action,
+            'middleware' => self::$middleware,
             'args' => [],
             ];
     }
@@ -206,6 +210,7 @@ class Routes
         self::$dynamicRoutes[$regex][$httpMethod] = [
             'prefix' => self::$prefix,
             'action' => $action,
+            'middleware' => self::$middleware,
             'args' => $variables,
             ];
     }
@@ -310,14 +315,25 @@ class Routes
     */
    public static function group(array $filters, \Closure $callback){
        $oldPrefix = self::$prefix;
+       $oldMiddleware = self::$middleware;
 
        // Check prefisso di gruppo
        if(isset($filters['prefix'])){
            self::$prefix = self::addPrefix($filters['prefix']);
        }
 
+       // check middleware
+       if(isset($filters['middleware'])){
+            if(is_array($filters['middleware'])){
+                self::$middleware = array_merge(self::$middleware, $filters['middleware']);
+            }else{
+                array_push(self::$middleware, $filters['middleware']);
+            }
+       }
+
        $callback();
 
+       self::$middleware = $oldMiddleware;
        self::$prefix = $oldPrefix;
    }
 
