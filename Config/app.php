@@ -16,9 +16,6 @@ return [
     // Sottocartella del backend nelle cartelle dell'App (controller, model)
     'backend_subfolder' => 'Admin',
 
-    // default middleware per tutte le rotte
-    'middlewares' => [
-        'CSRF' => App\Middlewares\VerifyCSRF::class,
-    ],
+    
 ];
 

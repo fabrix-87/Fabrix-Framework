@@ -9,9 +9,10 @@
 namespace System\Core;
 
 use Exception;
-use System\Core\{View, Router, Registry};
+use System\Core\{View, Registry};
 use System\Data\DataMapper;
 use System\Helpers\{Session, Alerts};
+use System\Routing\Routes;
 
 class Controller{
     protected $registry = null;
@@ -98,10 +99,10 @@ class Controller{
         }
 
         if(!$ok){
-            $routeInfo = $this->registry->get('router')->currentRoute();
+            $routeInfo = Routes::currentRoute();
             $prefix = empty($routeInfo['prefix']) ? '' : $routeInfo['prefix'].'.';
     		Session::set('from', $this->requests->getUri());
-    		Router::redirect(Router::route($prefix.'auth@index'));
+    		Routes::redirect(Routes::route($prefix.'auth@index'));
     		exit(0);
         }
 

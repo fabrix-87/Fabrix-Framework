@@ -73,6 +73,8 @@ class System{
         
         /** @var string Percorso nel namespace dei Mapper */
         define("MAPPER_FOLDER", APP_FOLDER . "\\Mappers\\");
+        /** @var string Percorso nel namespace dei Middleware */
+        define("MIDDLEWARE_FOLDER", APP_FOLDER . "\\Middlewares\\");
 
         /** @var string Percorso fisico della cartella dei Mapper */
         define("MAPPER_PATH", APP_PATH . "Mappers" . DS);

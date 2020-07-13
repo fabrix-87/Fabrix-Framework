@@ -36,12 +36,7 @@ class Config {
 
     public function get($key)
     {
-        if(isset($this->data[$key]))
-        {
-            return $this->data[$key];
-        }else{
-            return null;
-        }
+        return $this->data[$key] ?? null;
     }
 
     public function set($key, $value)

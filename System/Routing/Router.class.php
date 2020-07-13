@@ -45,12 +45,15 @@ class Router
 
     public function startRoute()
     {
-        $appCfg = $this->config->get('app');
-        $middlewares = $appCfg['middlewares'];
-
-        foreach($middlewares as $key => $middleware)
+        // eseguo i middleware prima di richiamare il controller
+        $modeCfg = $this->config->get($this->mode);
+        $middlewares = array_merge( $modeCfg['middlewares'],  $this->dispatchedRoute['middleware']);
+        foreach($middlewares as $middleware)
         {
-            new $middleware($this->registry);
+            if(class_exists($middleware))
+            {
+                new $middleware($this->registry);
+            }            
         }
 
         $response = $this->executeAction(

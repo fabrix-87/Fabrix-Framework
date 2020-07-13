@@ -3,7 +3,7 @@
 namespace App\Controllers\Admin;
 
 use System\Core\Controller;
-use System\Core\Router;
+use System\Routing\Routes;
 use System\Services\AuthService;
 use System\Helpers\{Alerts, Session};
 
@@ -19,7 +19,7 @@ class auth_Controller extends Controller
         if(!$this->user->isLogged()){
             $this->view->show('admin/login');
         }else{
-            Router::redirect(Router::route('admin.home@index'));
+            Routes::redirect(Routes::route('admin.home@index'));
         }
     }
 
@@ -29,28 +29,28 @@ class auth_Controller extends Controller
             $res = $this->user->login($this->requests->post('username'), $this->requests->post('password'));
             switch ($res) {
                 case 'ok':
-                    $url = Session::get('from') ?: Router::route('admin.home@index');
+                    $url = Session::get('from') ?: Routes::route('admin.home@index');
                     Session::remove('from');
-                    Router::redirect($url);
+                    Routes::redirect($url);
                     break;
                 case 'err_pwd':
                     Alerts::set(Alerts::ERROR, 'Password errata');
-                    Router::redirect(Router::route('admin.auth@index'));
+                    Routes::redirect(Routes::route('admin.auth@index'));
                     break;
                 default:
                     Alerts::set(Alerts::ERROR, 'Username non presente');
-                    Router::redirect(Router::route('admin.auth@index'));
+                    Routes::redirect(Routes::route('admin.auth@index'));
                     break;
             }
         }else{
-            Router::redirect(Router::route('admin.home@index'));
+            Routes::redirect(Routes::route('admin.home@index'));
         }
     }
 
     public function logout()
     {
         $this->user->logout();
-        Router::redirect(Router::route('admin.auth@index'));
+        Routes::redirect(Routes::route('admin.auth@index'));
     }
 }
 

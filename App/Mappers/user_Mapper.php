@@ -3,8 +3,6 @@
 namespace App\Mappers;
 
 use System\Data\DataMapper;
-use \PDO;
-// use App\User;
 
 /**
  *

@@ -141,12 +141,12 @@ class Request
 
     public function post(string $name)
     {
-        return isset($this->postParams[$name]) ? $this->postParams[$name] : false;
+        return $this->postParams[$name] ?? false;
     }
 
     public function get(string $name)
     {
-        return isset($this->getParams[$name]) ? $this->getParams[$name] : false;
+        return $this->getParams[$name] ?? false;
     }
 
 

@@ -20,7 +20,7 @@ class Routes
     private static $prefix = '';
 
     // lista delle middleware
-    private static $middleware = [];
+    private static $middlewares = [];
 
     private static $staticRoutes = [];
     private static $dynamicRoutes = [];
@@ -145,7 +145,7 @@ class Routes
      */
     public static function redirect(string $url): void
     {
-        $protocol = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+        $protocol = isset($_SERVER['HTTPS' ]) ? 'https://' : 'http://';
         header('Location: '.$protocol.str_replace("//", "/", $_SERVER['SERVER_NAME'].$url));
     }
 
@@ -190,7 +190,7 @@ class Routes
         self::$staticRoutes[$route][$httpMethod] = [
             'prefix' => self::$prefix,
             'action' => $action,
-            'middleware' => self::$middleware,
+            'middleware' => self::$middlewares,
             'args' => [],
             ];
     }
@@ -210,7 +210,7 @@ class Routes
         self::$dynamicRoutes[$regex][$httpMethod] = [
             'prefix' => self::$prefix,
             'action' => $action,
-            'middleware' => self::$middleware,
+            'middleware' => self::$middlewares,
             'args' => $variables,
             ];
     }
@@ -308,6 +308,26 @@ class Routes
        self::post('process', 'auth@login');
    }
 
+      
+   /**
+    * Aggiunge i middleware dichiarati nella configurazione delle rotte
+    *
+    * @param  mixed $data
+    * @return void
+    */
+   private static function addMiddleware($data)
+   {
+       if(is_array($data)){
+           foreach($data as $middleware)
+           {
+                self::addMiddleware($middleware);
+           }            
+       }else{
+           $middleware = MIDDLEWARE_FOLDER.ucfirst($data);
+           array_push(self::$middlewares, $middleware);
+       }
+   }
+
    /**
     * Raggruppa delle route con dei filtri uguali
     * @param array $filters
@@ -315,7 +335,7 @@ class Routes
     */
    public static function group(array $filters, \Closure $callback){
        $oldPrefix = self::$prefix;
-       $oldMiddleware = self::$middleware;
+       $oldMiddleware = self::$middlewares;
 
        // Check prefisso di gruppo
        if(isset($filters['prefix'])){
@@ -324,16 +344,12 @@ class Routes
 
        // check middleware
        if(isset($filters['middleware'])){
-            if(is_array($filters['middleware'])){
-                self::$middleware = array_merge(self::$middleware, $filters['middleware']);
-            }else{
-                array_push(self::$middleware, $filters['middleware']);
-            }
+            self::addMiddleware($filters['middleware']);
        }
 
        $callback();
 
-       self::$middleware = $oldMiddleware;
+       self::$middlewares = $oldMiddleware;
        self::$prefix = $oldPrefix;
    }
 
