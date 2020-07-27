@@ -3,6 +3,7 @@
 namespace System\Routing;
 
 use Exception;
+use System\Core\MiddlewareInterface;
 use System\Core\Registry;
 use System\Helpers\Session;
 use System\Routing\Routes;
@@ -52,7 +53,9 @@ class Router
         {
             if(class_exists($middleware))
             {
-                new $middleware($this->registry);
+                $mid = new $middleware();
+                if($mid instanceof MiddlewareInterface)
+                    $mid->process($this->registry->get('requests'));
             }            
         }
 

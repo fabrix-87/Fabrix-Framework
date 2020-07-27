@@ -3,7 +3,7 @@ var user_id = 0;
 $(function () {
 	var user_table = $("#user_list").DataTable({
 		ajax: {
-			url: 'ajax.php?route=users&action=userList',
+			url: 'api/admin/users/all',
 			dataSrc: 'user_list'
 		},
 		columns: [
@@ -11,7 +11,7 @@ $(function () {
 			{ data: 'firstname' },
 			{ data: 'lastname' },
 			{ data: 'username' },
-			{ data: 'regDate' },
+			{ data: 'registration_date' },
 			{ data: 'email' },
 			{ data: null }
 		],

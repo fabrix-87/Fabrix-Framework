@@ -1,6 +1,7 @@
 {
     "require": {
         "twig/twig": "^3.0",
-        "web-token/jwt-framework": "^2.1"
+        "nesbot/carbon": "^2.36",
+        "firebase/php-jwt": "^5.2"
     }
 }

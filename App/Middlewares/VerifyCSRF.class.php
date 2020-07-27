@@ -2,14 +2,14 @@
 
 namespace App\Middlewares;
 
-use System\Core\Registry;
+use System\Core\MiddlewareInterface;
+use System\Helpers\Request;
 use System\Helpers\Session;
 
-class VerifyCSRF
+class VerifyCSRF implements MiddlewareInterface
 {
-    public function __construct(Registry $registry)
+    public function process(Request $requests)
     {
-        $requests = $registry->get('requests');
         if($requests->hasPost())
         {
             if($requests->post('CSRF') and Session::get('token')) 

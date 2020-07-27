@@ -56,7 +56,6 @@ class Controller{
 
         // Se esiste un model associato al controller lo inizializzo
         try{
-            
             $this->model = new $modelClassName();
 
             // Se c'è un dataMapper personalizzato lo carico altrimenti uso quello generale
@@ -76,7 +75,7 @@ class Controller{
             }
         }catch(Exception $e){
             // model non trovato (fa niente)
-
+            //die($e->getMessage());
         }
 
         $this->view = new View($registry);

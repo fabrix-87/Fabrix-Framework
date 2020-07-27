@@ -43,6 +43,11 @@ class SystemUser
         return $this->auth->login($username, $password);
     }
 
+    public function __get($key)
+    {
+        return $this->userData->$key ?? null;
+    }
+
     //------------------------------		GET DATA		------------------------------//
     public function getUserLevel()
     {

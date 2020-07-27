@@ -21,7 +21,8 @@
 use System\Routing\Routes;
 
 Routes::group(['prefix' => BACKEND_PREFIX], function(){
-    Routes::resource('users');
+    Routes::get('users/all','users@getAll');
+    Routes::post('auth/login','auth@apiLogin');
 });
 
 Routes::get('test','test@prova');
