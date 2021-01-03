@@ -3,7 +3,7 @@
 namespace App\Middlewares;
 
 use System\Core\MiddlewareInterface;
-use System\Helpers\Request;
+use System\Http\Request;
 use System\Helpers\Session;
 
 class VerifyCSRF implements MiddlewareInterface

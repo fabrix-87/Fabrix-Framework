@@ -22,7 +22,6 @@ class Controller{
     protected $requests = null;
     protected $view;
     protected $request;
-    protected $requireLogin = false;
     protected $accessLevel = 0;
     protected $user;
 
@@ -38,10 +37,6 @@ class Controller{
         $this->config = $registry->get('config');
         $this->requests = $registry->get('requests');
         $this->user = $registry->get('user');
-
-        if($this->requireLogin){
-            $this->requireLogin();
-        }
 
         // Se non è stato definito assegno al nome del modello il nome del controller
         if(is_null($this->modelName))
@@ -81,31 +76,6 @@ class Controller{
         $this->view = new View($registry);
 
     }
-
-	public function requireLogin()
-	{
-        $ok = false;
-
-        if($this->user->isLogged()){
-            if($this->accessLevel <= $this->user->getUserLevel()){
-                $ok = true;
-            }else{
-                $this->user->logout();
-                Alerts::set(Alerts::ERROR,'Permessi insufficenti per accedere alla pagina');
-            }
-        }else{
-            Alerts::set(Alerts::ERROR,'Devi effettuare l\'accesso per accedere alla pagina');
-        }
-
-        if(!$ok){
-            $routeInfo = Routes::currentRoute();
-            $prefix = empty($routeInfo['prefix']) ? '' : $routeInfo['prefix'].'.';
-    		Session::set('from', $this->requests->getUri());
-    		Routes::redirect(Routes::route($prefix.'auth@index'));
-    		exit(0);
-        }
-
-	}
 
 }
 

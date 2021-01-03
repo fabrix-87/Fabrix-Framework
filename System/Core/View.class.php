@@ -29,7 +29,7 @@ class View {
     public function __construct(Registry $registry) {
         $this->registry = $registry;
 
-        $loader = new FilesystemLoader('Templates');
+        $loader = new FilesystemLoader('Templates/twig');
         $this->twig = new Environment($loader);
 
         // crea la lista dei breadcrumb

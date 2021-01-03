@@ -6,8 +6,6 @@ use System\Core\Controller;
 
 class posts_Controller extends Controller{
 
-    protected $requireLogin = true;
-
     public function index(){
 
         echo 'saro';

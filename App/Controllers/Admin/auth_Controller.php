@@ -61,6 +61,7 @@ class auth_Controller extends Controller
      */
     public function login()
     {
+
         if(!$this->user->isLogged()){
             $res = $this->signIn();
             if($res['status'] === 'success'){

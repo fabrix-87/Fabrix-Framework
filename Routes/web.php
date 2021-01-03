@@ -21,22 +21,24 @@
 use System\Routing\Routes;
 
 Routes::get('home','home@index');
- Routes::get('test','test@index');
- Routes::get('ciccio.html','test@index');
- Routes::get('user','user@index');
- Routes::auth();
+Routes::get('test','test@index');
+Routes::get('ciccio.html','test@index');
+//Routes::get('user','user@index');
+//Routes::auth();
 
- Routes::group(['prefix' => BACKEND_PREFIX], function(){
-     Routes::get('home','home@index');
-     Routes::get('/','home@index');
-     Routes::resource('users');
-     Routes::resource('posts');
-     Routes::auth();
- });
+Routes::group(['prefix' => BACKEND_PREFIX], function(){
+    Routes::group(['middleware' => 'Auth'],function(){
+        Routes::get('home','home@index');
+        Routes::get('/','home@index');
+        Routes::resource('users');
+        Routes::resource('posts');
+    });
+    Routes::auth();
+});
 
 
-
- //var_dump($route->getRoutes());
- //die();
-
+/*
+ var_dump(Routes::getRoutes());
+ die();
+*/
 ?>

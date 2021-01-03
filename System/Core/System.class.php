@@ -5,8 +5,9 @@ namespace System\Core;
 use System\Core\Registry;
 use System\Database\DB;
 use System\{Config, SystemUser};
-use System\Helpers\{Request, Session};
+use System\Helpers\{Session};
 use System\Routing\{Dispatcher, Router};
+use System\Http\{Request};
 
 use \Exception;
 
@@ -87,6 +88,7 @@ class System{
         define("LIB_PATH", FRAMEWORK_PATH . "Libraries" . DS);
         define("HELPER_PATH", FRAMEWORK_PATH . "Helpers" . DS);
         define("SERVICES_PATH", FRAMEWORK_PATH . "Services" . DS);
+        define("HTTP_PATH", FRAMEWORK_PATH . "Http" . DS);
         define("DATA_PATH", FRAMEWORK_PATH . "Data" . DS);
         define("UPLOAD_PATH", PUBLIC_PATH . "uploads" . DS);
         define("ASSETS_PATH", ROOT . "assets" . DS);
@@ -136,6 +138,9 @@ class System{
                     break;
                 case 'routing':
                     $includePath = ROUTING_PATH . "$className.class.php";
+                    break;
+                case 'http':
+                    $includePath = HTTP_PATH . "$className.class.php";
                     break;
                 default:
                     $includePath = FRAMEWORK_PATH . "$className.class.php";
