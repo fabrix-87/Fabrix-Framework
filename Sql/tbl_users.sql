@@ -55,13 +55,6 @@ CREATE TABLE `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dump dei dati per la tabella `users`
---
-
-INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `password`, `ip`, `gender`, `birthday`, `username`, `registration_date`, `last_visit`, `active`, `fb_user_id`, `banned`, `level`, `reset_password_code`, `autologin_hash`, `autologin_expire`, `new_password`, `new_secret_question`, `new_secret`, `modify_security`, `new_password_code`) VALUES
-(1, 'Fabrizio', '', 'f.menza@gmail.com', '$2y$10$q9qTQ3T3ziQHa8RpeonBJu72Y/nidomzLvp7oE7GlD6sh0RMwZwOi', '79.31.180.7', '', '', 'webmaster', '1379269123', '1521063971', '', '', 0, 1, '', '', '', '', 0, '', '', '');
-
---
 -- Indici per le tabelle scaricate
 --
 
