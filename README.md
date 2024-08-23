@@ -104,7 +104,3 @@ Questo progetto è distribuito sotto licenza MIT. Vedi il file [LICENSE](LICENSE
 ## Contatti
 
 Per domande o supporto, puoi contattare l'autore [Fabrizio Menza](https://github.com/fabrix-87).
-
-```
-
-Questo file `README.md` è stato adattato per il repository su GitHub che hai indicato e riflette accuratamente le informazioni rilevanti per il progetto.
